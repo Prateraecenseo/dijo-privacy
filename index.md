@@ -2,8 +2,6 @@
 
 **Version 1.0 · Effective 2026-05-01 · Last updated 2026-04-24**
 
-This is a DRAFT for review. Host the final version on `dijo-app.se/privacy` (or `dijo-app.com/privacy`) and link it from App Store Connect. Both Swedish and English versions are provided. The English version is the App Store submission language; the Swedish version is for your domain's Swedish visitors.
-
 ---
 
 ## English version
