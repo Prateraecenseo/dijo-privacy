@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DiJo — The Original Digital Journal for iPad</title>
+<meta name="description" content="A digital notebook for iPad and Apple Pencil. No account, no cloud, no analytics, no AI. Every note stays on your iPad. One-time purchase, no subscription." />
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="DiJo — The Original Digital Journal for iPad" />
+<meta property="og:description" content="A digital notebook that stays out of your way. No account, no cloud, no analytics, no AI. One-time purchase." />
+<meta property="og:url" content="https://dijo-app.com/" />
+<!-- og:image uses the app icon (deployed alongside this page). For a richer social preview, replace with a purpose-made 1200x630 share image at dijo-app.com/share-image.png. -->
+<meta property="og:image" content="https://dijo-app.com/app-icon.png" />
+<meta name="twitter:card" content="summary" />
+
+<!-- Favicon: the app icon, deployed alongside index.html. -->
+<link rel="icon" href="/app-icon.png" />
+
+<!-- Display serif. Body uses the native Apple system font for a fast, on-device feel. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --paper:#f6f2e9;
+    --paper-2:#efe8d8;
+    --ink:#23211c;
+    --ink-soft:#5f594c;
+    --line:rgba(35,33,28,0.14);
+    --accent:#33414f;
+    --accent-ink:#2a3640;
+    --radius:14px;
+    --maxw:1080px;
+    --serif:"Fraunces",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.62;
+    font-size:17px;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.14;letter-spacing:-0.01em;}
+  h1{font-size:clamp(2.6rem,6vw,4.4rem);}
+  h2{font-size:clamp(1.9rem,3.6vw,2.7rem);}
+  h3{font-size:1.18rem;line-height:1.3;}
+  p{color:var(--ink-soft);}
+  .kicker{
+    font-family:var(--sans);
+    font-size:.78rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:.5em;
+    font-family:var(--sans);font-size:1rem;font-weight:600;
+    padding:.85em 1.5em;border-radius:999px;
+    text-decoration:none;border:1px solid transparent;
+    transition:transform .12s ease,background .2s ease,box-shadow .2s ease;
+  }
+  .btn-primary{background:var(--accent-ink);color:var(--paper);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px -12px rgba(35,33,28,.5);}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line);}
+  .btn-ghost:hover{background:var(--paper-2);}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(246,242,233,.85);
+    backdrop-filter:saturate(180%) blur(12px);
+    -webkit-backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px;}
+  .brand{display:flex;align-items:center;gap:.55em;text-decoration:none;font-family:var(--serif);font-size:1.4rem;font-weight:600;letter-spacing:-0.02em;}
+  .brand img{width:30px;height:30px;border-radius:7px;}
+  .nav-links{display:flex;align-items:center;gap:1.8rem;}
+  .nav-links a{text-decoration:none;font-size:.95rem;color:var(--ink-soft);font-weight:500;}
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links .btn{padding:.55em 1.15em;font-size:.92rem;}
+  @media(max-width:680px){.nav-links a:not(.btn){display:none;}}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:84px 0 76px;
+    background:
+      radial-gradient(circle at 1px 1px,var(--line) 1px,transparent 0);
+    background-size:26px 26px;
+  }
+  .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;}
+  .hero h1{margin:.32em 0 .38em;}
+  .hero p.lead{font-size:1.16rem;max-width:30em;}
+  .hero-cta{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.9rem;}
+  .price-note{font-size:.92rem;color:var(--ink-soft);}
+  .price-note strong{color:var(--ink);font-weight:600;}
+
+  /* hero icon */
+  .hero-icon-wrap{display:flex;align-items:center;justify-content:center;}
+  .hero-icon{
+    width:100%;max-width:380px;height:auto;display:block;
+    border-radius:22%;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.4) inset,
+      0 36px 70px -28px rgba(35,33,28,.5),
+      0 14px 28px -18px rgba(194,122,77,.35);
+  }
+
+  @media(max-width:820px){
+    .hero-inner{grid-template-columns:1fr;gap:44px;}
+    .hero{padding:54px 0 60px;}
+    .hero-icon{max-width:240px;}
+  }
+
+  /* ---------- generic section ---------- */
+  section{padding:78px 0;}
+  .section-head{max-width:34em;margin-bottom:48px;}
+  .section-head h2{margin:.28em 0 .4em;}
+
+  /* ---------- statement ---------- */
+  .statement{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .statement p.big{
+    font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.15rem);
+    line-height:1.34;color:var(--ink);max-width:20em;font-weight:400;
+  }
+  .statement p.big em{font-style:italic;color:var(--accent);}
+
+  /* ---------- features ---------- */
+  .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px 34px;}
+  @media(max-width:820px){.feature-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:540px){.feature-grid{grid-template-columns:1fr;}}
+  .feature{padding-top:22px;border-top:1.5px solid var(--ink);}
+  .feature h3{margin-bottom:.3em;}
+  .feature p{font-size:.97rem;}
+
+  /* ---------- privacy ---------- */
+  .privacy{background:var(--accent-ink);color:var(--paper);}
+  .privacy .kicker{color:rgba(246,242,233,.6);}
+  .privacy h2{color:var(--paper);}
+  .privacy p{color:rgba(246,242,233,.78);}
+  .privacy-list{display:grid;grid-template-columns:1fr 1fr;gap:14px 34px;margin-top:34px;list-style:none;}
+  @media(max-width:600px){.privacy-list{grid-template-columns:1fr;}}
+  .privacy-list li{
+    padding-left:30px;position:relative;
+    color:rgba(246,242,233,.9);font-size:1rem;
+  }
+  .privacy-list li::before{
+    content:"";position:absolute;left:0;top:.5em;width:13px;height:13px;
+    border:1.5px solid rgba(246,242,233,.55);border-radius:50%;
+  }
+  .privacy-list li strong{color:var(--paper);font-weight:600;}
+
+  /* ---------- pricing ---------- */
+  .pricing{text-align:center;}
+  .price-card{
+    max-width:420px;margin:0 auto;
+    background:#fbf8f1;border:1px solid var(--line);
+    border-radius:var(--radius);padding:48px 40px;
+    box-shadow:0 24px 50px -32px rgba(35,33,28,.4);
+  }
+  .price-big{font-family:var(--serif);font-size:3.6rem;font-weight:500;line-height:1;}
+  .price-sub{font-size:.96rem;color:var(--ink-soft);margin:.5em 0 1.4em;}
+  .price-alt{font-size:.86rem;color:var(--ink-soft);margin-top:1.3em;}
+  .price-card ul{list-style:none;text-align:left;margin:1.6rem 0;display:grid;gap:.55rem;}
+  .price-card li{padding-left:26px;position:relative;font-size:.96rem;color:var(--ink-soft);}
+  .price-card li::before{content:"—";position:absolute;left:0;color:var(--accent);}
+
+  /* ---------- faq ---------- */
+  .faq details{
+    border-top:1px solid var(--line);padding:6px 0;
+  }
+  .faq details:last-of-type{border-bottom:1px solid var(--line);}
+  .faq summary{
+    cursor:pointer;list-style:none;padding:18px 36px 18px 0;position:relative;
+    font-family:var(--serif);font-size:1.16rem;font-weight:500;color:var(--ink);
+  }
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary::after{
+    content:"+";position:absolute;right:4px;top:14px;font-size:1.5rem;
+    color:var(--ink-soft);transition:transform .2s ease;font-family:var(--sans);
+  }
+  .faq details[open] summary::after{transform:rotate(45deg);}
+  .faq details p{padding:0 0 20px;max-width:46em;font-size:1rem;}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--paper-2);border-top:1px solid var(--line);padding:54px 0 40px;}
+  .foot-inner{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;}
+  .foot-brand{font-family:var(--serif);font-size:1.3rem;font-weight:600;}
+  .foot-links{display:flex;gap:1.6rem;flex-wrap:wrap;}
+  .foot-links a{text-decoration:none;color:var(--ink-soft);font-size:.93rem;}
+  .foot-links a:hover{color:var(--ink);}
+  .foot-fine{margin-top:30px;font-size:.83rem;color:var(--ink-soft);}
+
+  .cta-row{margin-top:40px;}
+  @media(max-width:540px){section{padding:58px 0;}}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">
+      <img src="app-icon.png" alt="DiJo app icon" />
+      DiJo
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#pricing">Pricing</a>
+      <a class="btn btn-primary" href="https://apps.apple.com/app/id6767680358">Get DiJo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div>
+      <span class="kicker">The Original Digital Journal</span>
+      <h1>A notebook that stays out of your way.</h1>
+      <p class="lead">DiJo is a digital notebook for iPad and Apple Pencil. No account. No cloud. No analytics. No AI. Just you, the page, and your pencil.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="https://apps.apple.com/app/id6767680358">Download on the App Store</a>
+        <span class="price-note"><strong>$5.99</strong> &middot; one-time purchase</span>
+      </div>
+    </div>
+    <div class="hero-icon-wrap">
+      <img class="hero-icon" src="app-icon.png" alt="DiJo app icon" />
+    </div>
+  </div>
+</header>
+
+<!-- ================= STATEMENT ================= -->
+<section class="statement">
+  <div class="wrap">
+    <span class="kicker">Why DiJo</span>
+    <p class="big" style="margin-top:.6em;">Most note-taking apps want to be a platform. DiJo wants to be <em>a notebook</em> — bounded, quiet, and entirely yours.</p>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">What's inside</span>
+      <h2>Few features, made well.</h2>
+      <p>Everything paper does, plus the handful of things paper can't. Nothing more.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>Pressure-sensitive ink</h3>
+        <p>Apple Pencil renders every stroke exactly as hard as you draw it. Four pen sizes, a highlighter, an eraser, and a built-in ruler.</p>
+      </div>
+      <div class="feature">
+        <h3>Three classic pages</h3>
+        <p>Dot grid, ruled, or blank — in A5 and A6, at near-actual-size proportions. 251 pages to a notebook.</p>
+      </div>
+      <div class="feature">
+        <h3>Tap-to-jump index</h3>
+        <p>A topic index with page references and ranges. Tap an entry and land on the page. No flipping, no search box.</p>
+      </div>
+      <div class="feature">
+        <h3>A real page turn</h3>
+        <p>The A6 landscape spread lifts only the inner page over the spine — the way a real notebook turns, not stretched or faked.</p>
+      </div>
+      <div class="feature">
+        <h3>Locked to your iPad</h3>
+        <p>Each notebook can sit behind Face ID or your passcode. More private than a paper notebook left on a desk.</p>
+      </div>
+      <div class="feature">
+        <h3>A shelf of your own</h3>
+        <p>Build a library of notebooks. Per-page undo and redo that's never destructive. Export any page as PDF or image.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRIVACY ================= -->
+<section class="privacy" id="privacy">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Privacy by architecture</span>
+      <h2>Your notes never leave your iPad.</h2>
+      <p>This isn't a privacy policy. It's how the app is built. There is no server for your words to travel to.</p>
+    </div>
+    <ul class="privacy-list">
+      <li><strong>No account.</strong> Nothing to sign up for, nothing to sign in to.</li>
+      <li><strong>No cloud sync.</strong> Your notebooks live on the device, not on ours.</li>
+      <li><strong>No analytics.</strong> The app doesn't measure you. Apple confirms: no data collected.</li>
+      <li><strong>No advertising.</strong> No trackers, no third parties, no exceptions.</li>
+      <li><strong>No AI assistant.</strong> Nothing reads your pages or suggests what to write.</li>
+      <li><strong>Your backup, your choice.</strong> Optional iCloud Drive backup that you control.</li>
+    </ul>
+    <div class="cta-row">
+      <a class="btn btn-ghost" style="color:var(--paper);border-color:rgba(246,242,233,.4);" href="https://dijo-app.com/privacy/">Read the full privacy policy</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="section-head" style="margin-left:auto;margin-right:auto;text-align:center;">
+      <span class="kicker">One price, once</span>
+      <h2>Buy it. Own it.</h2>
+    </div>
+    <div class="price-card">
+      <div class="price-big">$5.99</div>
+      <div class="price-sub">One-time purchase &middot; €5.99</div>
+      <ul>
+        <li>No subscription, ever</li>
+        <li>No in-app purchases</li>
+        <li>Free updates to DiJo 1.x</li>
+        <li>Family Sharing supported</li>
+      </ul>
+      <a class="btn btn-primary" href="https://apps.apple.com/app/id6767680358">Download on the App Store</a>
+      <p class="price-alt">Requires an iPad and Apple Pencil.<br />Available in 175 countries.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Questions</span>
+      <h2>Good to know.</h2>
+    </div>
+    <details>
+      <summary>Does DiJo sync between my devices?</summary>
+      <p>No — and that's deliberate. DiJo keeps your notebooks on the iPad they were made on. If you want a safety copy, you can turn on optional iCloud Drive backup, which stays inside your own iCloud account. Nothing passes through a DiJo server, because there isn't one.</p>
+    </details>
+    <details>
+      <summary>What happens to my notes if I change iPad?</summary>
+      <p>If you use the optional iCloud Drive backup, restoring your new iPad from an iCloud backup brings your notebooks with it. Your data follows your Apple account — not DiJo.</p>
+    </details>
+    <details>
+      <summary>Do I need an Apple Pencil?</summary>
+      <p>Yes. DiJo's writing experience is built around the Apple Pencil's pressure-sensitive ink — an Apple Pencil is required to use the app.</p>
+    </details>
+    <details>
+      <summary>Is there a free trial?</summary>
+      <p>No trial, and no free tier with features held back. DiJo is a single one-time purchase of $5.99. You buy the whole app once and own it.</p>
+    </details>
+    <details>
+      <summary>Will there be a subscription later?</summary>
+      <p>No. DiJo is sold as a one-time purchase on principle. Updates within DiJo 1.x are included.</p>
+    </details>
+    <details>
+      <summary>Is it on iPhone or Mac?</summary>
+      <p>DiJo is iPad-only. It was designed for the iPad form factor and Apple Pencil from the first day, rather than stretched across devices it wasn't built for.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <div>
+        <div class="foot-brand">DiJo</div>
+        <p style="font-size:.9rem;margin-top:.3em;">The Original Digital Journal — for iPad.<br />Made by an independent developer in Sweden.</p>
+      </div>
+      <div class="foot-links">
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#pricing">Pricing</a>
+        <a href="https://dijo-app.com/privacy/">Privacy Policy</a>
+        <a href="https://apps.apple.com/app/id6767680358">App Store</a>
+        <a href="mailto:support@dijo-app.com">support@dijo-app.com</a>
+      </div>
+    </div>
+    <p class="foot-fine">&copy; 2026 DiJo. Apple, iPad, and Apple Pencil are trademarks of Apple Inc. App Store is a service mark of Apple Inc.</p>
+  </div>
+</footer>
+
+</body>
+</html>
